@@ -6,13 +6,25 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "postinstall": "node ./postInstall && node react-native-map-web-fix.js"
   },
   "dependencies": {
+    "@expo/metro-runtime": "~3.2.1",
+    "@react-native-async-storage/async-storage": "^1.23.1",
+    "@react-native-community/geolocation": "^3.2.1",
+    "@react-navigation/bottom-tabs": "^6.5.20",
+    "@react-navigation/native": "^6.1.17",
+    "@react-navigation/native-stack": "^6.9.26",
     "expo": "~51.0.14",
     "expo-status-bar": "~1.12.1",
+    "firebase": "^10.12.2",
     "react": "18.2.0",
-    "react-native": "0.74.2"
+    "react-dom": "18.2.0",
+    "react-native": "0.74.2",
+    "react-native-maps": "1.14.0",
+    "react-native-web": "~0.19.10",
+    "expo-location": "~17.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
