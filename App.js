@@ -1,4 +1,5 @@
 import React from 'react';
+import 'react-native-screens';
 import { StyleSheet, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -14,6 +15,7 @@ import Phosphorus from './src/screen/posporus';
 import Nitrogen from './src/screen/nitrogen';
 import data from './src/screen/data';
 import Location from './src/screen/location';
+import ManualUpdate from './src/screen/ManualUpdate';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import useAuth from './src/hooks/useAuth';
 
@@ -40,6 +42,9 @@ function HomeStack() {
         <Stack.Screen name="Nitrogen" component={Nitrogen}/>
         <Stack.Screen name="data" component={data}/>
         <Stack.Screen name="Location" component={Location}/>
+        <Stack.Screen name="ManualUpdate" component={ManualUpdate}/>
+        
+      
       </Stack.Navigator>
     );
 

@@ -55,23 +55,27 @@ const Main = () => {
   };
 
   const renderDotIndicators = () => {
-    return carouselData.map((dot, index) => {
-      const backgroundColor = activeIndex === index ? "green" : "red";
-      return (
-        <View
-          key={index}
-          style={{
-            backgroundColor,
-            height: 10,
-            width: 10,
-            borderRadius: 5,
-            marginHorizontal: 6,
-          }}
-        ></View>
-      );
-    });
+    return (
+      <View style={styles.dotContainer}>
+        {carouselData.map((dot, index) => {
+          const backgroundColor = activeIndex === index ? "green" : "red";
+          return (
+            <View
+              key={index}
+              style={{
+                backgroundColor,
+                height: 10,
+                width: 10,
+                borderRadius: 5,
+                marginHorizontal: 6,
+              }}
+            ></View>
+          );
+        })}
+      </View>
+    );
   };
-
+  
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <Text style={styles.headerText}>NPK Data Tracker</Text>
@@ -90,6 +94,14 @@ const Main = () => {
         image={require("../assets/location.jpg")}
         name="Location"
         categories="See your location"
+         />
+         </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate('MeterScreen')}>
+      <CardComponent
+        image={require("../assets/npk.jpeg")}
+        name="NPK Values"
+        categories="See your values"
          />
          </TouchableOpacity>
          
