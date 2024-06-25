@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, CheckBox, Button } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Button } from 'react-native';
+import CustomCheckBox from './CustomCheckBox'; // Ensure this path is correct
 
-const Data = ({ navigation, onSelect }) => {
+const Data = ({ navigation, onSelect = () => {} }) => {
   const [locationData, setLocationData] = useState([]);
   const [npkData, setNpkData] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Fetch location data from the API
-    fetch('https://api.thingspeak.com/channels/YOUR_CHANNEL_ID/fields/1.json?api_key=YOUR_API_KEY')
+    fetch('https://api.thingspeak.com/channels/YOUR_CHANNEL_ID/fields/1.json?api_key=YOUR_API_KEY&results=10')
       .then(response => response.json())
       .then(data => {
         setLocationData(data.feeds || []);
@@ -18,7 +20,7 @@ const Data = ({ navigation, onSelect }) => {
       });
 
     // Fetch NPK data from the API
-    fetch('https://api.thingspeak.com/channels/YOUR_CHANNEL_ID/fields/2.json?api_key=YOUR_API_KEY')
+    fetch('https://api.thingspeak.com/channels/2525297/fields/1,2,3.json?api_key=IT6C7L8OKXB6KZ9B&results=10')
       .then(response => response.json())
       .then(data => {
         setNpkData(data.feeds || []);
@@ -48,11 +50,11 @@ const Data = ({ navigation, onSelect }) => {
           <Text style={styles.tableHeader}>Longitude</Text>
           <Text style={styles.tableHeader}>Timestamp</Text>
         </View>
-        {locationData.length > 0 && locationData.map((item, index) => (
+        {locationData.slice(0, 10).map((item, index) => (
           <View style={styles.tableRow} key={index}>
-            <CheckBox
-              value={selectedData.some((data) => data.created_at === item.created_at)}
-              onValueChange={() => handleSelect(item)}
+            <CustomCheckBox
+              isChecked={selectedData.some((data) => data.created_at === item.created_at)}
+              onPress={() => handleSelect(item)}
             />
             <Text style={styles.tableCell}>{item.field1}</Text>
             <Text style={styles.tableCell}>{item.field2}</Text>
@@ -70,11 +72,11 @@ const Data = ({ navigation, onSelect }) => {
           <Text style={styles.tableHeader}>K</Text>
           <Text style={styles.tableHeader}>Timestamp</Text>
         </View>
-        {npkData.length > 0 && npkData.map((item, index) => (
+        {npkData.slice(0, 10).map((item, index) => (
           <View style={styles.tableRow} key={index}>
-            <CheckBox
-              value={selectedData.some((data) => data.created_at === item.created_at)}
-              onValueChange={() => handleSelect(item)}
+            <CustomCheckBox
+              isChecked={selectedData.some((data) => data.created_at === item.created_at)}
+              onPress={() => handleSelect(item)}
             />
             <Text style={styles.tableCell}>{item.field1}</Text>
             <Text style={styles.tableCell}>{item.field2}</Text>
@@ -84,12 +86,12 @@ const Data = ({ navigation, onSelect }) => {
         ))}
       </View>
 
-      <Button style={styles.button}
+      <Button
         title="Manual Update"
         onPress={() => navigation.navigate('ManualUpdate')}
       />
 
-<Button style={styles.buttonnew}
+      <Button
         title="Channel 3"
         onPress={() => navigation.navigate('NewData')}
       />
@@ -101,11 +103,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: '#fff', // Background color to differentiate the table
   },
   header: {
     fontSize: 20,
     fontWeight: 'bold',
     marginVertical: 8,
+    textAlign: 'center',
   },
   table: {
     borderWidth: 1,
@@ -115,21 +119,20 @@ const styles = StyleSheet.create({
   tableRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 8,
+    padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
   },
   tableHeader: {
     flex: 1,
     fontWeight: 'bold',
+    textAlign: 'center', // Center the header text
   },
   tableCell: {
     flex: 1,
+    textAlign: 'center', // Center the cell text
+    padding: 5,
   },
-  buttonnew:{
-    marginTop:10,
-    paddingTop:10,
-  }
 });
 
 export default Data;
