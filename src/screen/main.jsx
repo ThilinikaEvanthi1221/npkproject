@@ -97,7 +97,7 @@ const Main = () => {
          />
          </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('MeterScreen')}>
+      <TouchableOpacity onPress={() => navigation.navigate('NPKcharts')}>
       <CardComponent
         image={require("../assets/npk.jpeg")}
         name="NPK Values"

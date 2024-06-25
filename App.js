@@ -18,6 +18,7 @@ import Location from './src/screen/location';
 import ManualUpdate from './src/screen/ManualUpdate';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import useAuth from './src/hooks/useAuth';
+import NPKCharts from './src/screen/NPKcharts';
 
 
 const home = 'Home';
@@ -43,6 +44,7 @@ function HomeStack() {
         <Stack.Screen name="data" component={data}/>
         <Stack.Screen name="Location" component={Location}/>
         <Stack.Screen name="ManualUpdate" component={ManualUpdate}/>
+        <Stack.Screen name="NPKcharts" component={NPKCharts}/>
         
       
       </Stack.Navigator>
