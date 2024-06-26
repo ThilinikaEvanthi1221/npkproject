@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, FlatList } from 'react-native';
 
-const ManualUpdate = ({ onAdd }) => {
+const ManualUpdate = () => {
   const [latitude, setLatitude] = useState('');
   const [longitude, setLongitude] = useState('');
   const [n, setN] = useState('');
@@ -9,7 +9,7 @@ const ManualUpdate = ({ onAdd }) => {
   const [k, setK] = useState('');
   const [data, setData] = useState([]);
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     const newData = {
       id: Date.now().toString(), // Unique ID for FlatList
       latitude,
@@ -21,10 +21,36 @@ const ManualUpdate = ({ onAdd }) => {
 
     setData([...data, newData]);
 
-    if (typeof onAdd === 'function') {
-      onAdd(newData);
+    // Prepare data to send to ThingSpeak
+    const tsData = {
+      api_key: '9FCBJCHUZDT0M9I8',
+      field1: latitude.toString(),
+      field2: longitude.toString(),
+      field3: n.toString(),
+      field4: p.toString(),
+      field5: k.toString(),
+    };
+
+    try {
+      // Send data to ThingSpeak
+      const response = await fetch(`https://api.thingspeak.com/update.json`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(tsData),
+      });
+
+      if (response.ok) {
+        console.log('Data uploaded to ThingSpeak successfully.');
+      } else {
+        console.error('Failed to upload data to ThingSpeak.');
+      }
+    } catch (error) {
+      console.error('Error uploading data to ThingSpeak:', error);
     }
 
+    // Clear input fields after submission
     setLatitude('');
     setLongitude('');
     setN('');

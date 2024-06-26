@@ -9,25 +9,30 @@ const Data = ({ navigation, onSelect = () => {} }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch location data from the API
-    fetch('https://api.thingspeak.com/channels/2586125/fields/1,2.json?api_key=HO4I0XZDMP021OVS&results=10')
-      .then(response => response.json())
-      .then(data => {
-        setLocationData(data.feeds || []);
-      })
-      .catch(error => {
-        console.error('Error fetching location data:', error);
-      });
+    // Function to fetch data from ThingSpeak API
+    const fetchData = async () => {
+      try {
+        // Fetch location data from the API
+        const locationResponse = await fetch('https://api.thingspeak.com/channels/2586125/fields/1,2.json?api_key=HO4I0XZDMP021OVS&results=10');
+        const locationDataJson = await locationResponse.json();
 
-    // Fetch NPK data from the API
-    fetch('https://api.thingspeak.com/channels/2525297/fields/1,2,3.json?api_key=IT6C7L8OKXB6KZ9B&results=10')
-      .then(response => response.json())
-      .then(data => {
-        setNpkData(data.feeds || []);
-      })
-      .catch(error => {
-        console.error('Error fetching NPK data:', error);
-      });
+        // Prepend new location data to existing locationData array
+        setLocationData(prevLocationData => [...locationDataJson.feeds.reverse(), ...prevLocationData]);
+
+        // Fetch NPK data from the API
+        const npkResponse = await fetch('https://api.thingspeak.com/channels/2525297/fields/1,2,3.json?api_key=IT6C7L8OKXB6KZ9B&results=10');
+        const npkDataJson = await npkResponse.json();
+
+        // Prepend new npk data to existing npkData array
+        setNpkData(prevNpkData => [...npkDataJson.feeds.reverse(), ...prevNpkData]);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false); // Set loading state to false after fetching data
+      }
+    };
+
+    fetchData(); // Call fetchData function when component mounts
   }, []);
 
   const handleSelect = (item) => {
@@ -43,7 +48,7 @@ const Data = ({ navigation, onSelect = () => {} }) => {
   return (
     <ScrollView style={styles.container}>
 
-<Button
+      <Button
         title="Manual Update"
         onPress={() => navigation.navigate('ManualUpdate')}
       />
@@ -56,7 +61,7 @@ const Data = ({ navigation, onSelect = () => {} }) => {
           <Text style={styles.tableHeader}>Longitude</Text>
           <Text style={styles.tableHeader}>Timestamp</Text>
         </View>
-        {locationData.slice(0, 10).map((item, index) => (
+        {locationData.map((item, index) => (
           <View style={styles.tableRow} key={index}>
             <CustomCheckBox
               isChecked={selectedData.some((data) => data.created_at === item.created_at)}
@@ -78,7 +83,7 @@ const Data = ({ navigation, onSelect = () => {} }) => {
           <Text style={styles.tableHeader}>K</Text>
           <Text style={styles.tableHeader}>Timestamp</Text>
         </View>
-        {npkData.slice(0, 10).map((item, index) => (
+        {npkData.map((item, index) => (
           <View style={styles.tableRow} key={index}>
             <CustomCheckBox
               isChecked={selectedData.some((data) => data.created_at === item.created_at)}
@@ -91,8 +96,6 @@ const Data = ({ navigation, onSelect = () => {} }) => {
           </View>
         ))}
       </View>
-
-      
       
     </ScrollView>
   );
