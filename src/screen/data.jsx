@@ -42,6 +42,12 @@ const Data = ({ navigation, onSelect = () => {} }) => {
 
   return (
     <ScrollView style={styles.container}>
+
+<Button
+        title="Manual Update"
+        onPress={() => navigation.navigate('ManualUpdate')}
+      />
+
       <Text style={styles.header}>Location Data (Channel 1)</Text>
       <View style={styles.table}>
         <View style={styles.tableRow}>
@@ -86,15 +92,8 @@ const Data = ({ navigation, onSelect = () => {} }) => {
         ))}
       </View>
 
-      <Button
-        title="Manual Update"
-        onPress={() => navigation.navigate('ManualUpdate')}
-      />
-
-      <Button
-        title="Channel 3"
-        onPress={() => navigation.navigate('NewData')}
-      />
+      
+      
     </ScrollView>
   );
 };
