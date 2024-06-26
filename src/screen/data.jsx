@@ -10,7 +10,7 @@ const Data = ({ navigation, onSelect = () => {} }) => {
 
   useEffect(() => {
     // Fetch location data from the API
-    fetch('https://api.thingspeak.com/channels/YOUR_CHANNEL_ID/fields/1.json?api_key=YOUR_API_KEY&results=10')
+    fetch('https://api.thingspeak.com/channels/2586125/fields/1,2.json?api_key=HO4I0XZDMP021OVS&results=10')
       .then(response => response.json())
       .then(data => {
         setLocationData(data.feeds || []);
