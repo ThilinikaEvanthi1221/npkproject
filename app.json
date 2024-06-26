@@ -26,11 +26,16 @@
         "googleMaps": {
           "apiKey": "AIzaSyBHCNET6A4CoxCkLMb-5gjyzJWSGAyD2VQ"
         }
-      }
+      },
+      "package": "com.npk.app"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "04dc58e3-6f2b-4991-a28a-c921a45252c8"
+      }
     }
-    
   }
 }

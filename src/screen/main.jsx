@@ -1,14 +1,5 @@
-import {
-  FlatList,
-  Image,
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import { View, Text, FlatList, Image, StyleSheet, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { colors } from "../utils/color";
@@ -18,10 +9,10 @@ const Main = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const navigation = useNavigation();
 
-  const handleData = () =>{
+  const handleData = () => {
     navigation.navigate("data");
-}
-  
+  };
+
   const carouselData = [
     {
       id: "01",
@@ -75,7 +66,14 @@ const Main = () => {
       </View>
     );
   };
-  
+
+  const handleLogout = () => {
+    // Implement your logout logic here
+    // For example, clearing user session, navigating to login screen, etc.
+    navigation.navigate("Home");
+    console.log('Logout button pressed');
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <Text style={styles.headerText}>NPK Data Tracker</Text>
@@ -89,29 +87,35 @@ const Main = () => {
         showsHorizontalScrollIndicator={false}
       />
       <View style={styles.dotContainer}>{renderDotIndicators()}</View>
+
+      {/* Cards with navigation */}
       <TouchableOpacity onPress={() => navigation.navigate('Location')}>
-      <CardComponent
-        image={require("../assets/location.jpg")}
-        name="Location"
-        categories="See your location"
-         />
-         </TouchableOpacity>
+        <CardComponent
+          image={require("../assets/location.jpg")}
+          name="Location"
+          categories="See your location"
+        />
+      </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate('NPKcharts')}>
-      <CardComponent
-        image={require("../assets/npk.jpeg")}
-        name="NPK Values"
-        categories="See your values"
-         />
-         </TouchableOpacity>
-         
+        <CardComponent
+          image={require("../assets/npk.jpeg")}
+          name="NPK Values"
+          categories="See your values"
+        />
+      </TouchableOpacity>
 
       <TouchableOpacity onPress={handleData}>
-      <CardComponent
-        image={require("../assets/data.jpeg") }
-        name="Data"
-        categories="See your data"
-      />
+        <CardComponent
+          image={require("../assets/data.jpeg")}
+          name="Data"
+          categories="See your data"
+        />
+      </TouchableOpacity>
+
+      {/* Logout button */}
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <Text style={styles.logoutText}>Logout</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -158,6 +162,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 30,
   },
+  logoutButton: {
+    marginVertical: 20,
+    backgroundColor: 'red',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+  },
+  logoutText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
 });
 
 const cardStyles = StyleSheet.create({
@@ -199,17 +216,5 @@ const cardStyles = StyleSheet.create({
   },
   categoryStyle: {
     fontWeight: '400',
-  },
-  iconLabelStyle: {
-    flexDirection: 'row',
-    marginTop: 10,
-  },
-  iconContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 10,
-  },
-  iconText: {
-    marginLeft: 5,
   },
 });

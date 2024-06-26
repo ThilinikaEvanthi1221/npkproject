@@ -17,6 +17,7 @@ const ManualUpdate = () => {
         const savedData = await AsyncStorage.getItem('savedData');
         if (savedData !== null) {
           setData(JSON.parse(savedData));
+          console.log('Data loaded from AsyncStorage:', JSON.parse(savedData));
         }
       } catch (error) {
         console.error('Error loading data from AsyncStorage:', error);
@@ -29,6 +30,7 @@ const ManualUpdate = () => {
   const saveData = async (newData) => {
     try {
       await AsyncStorage.setItem('savedData', JSON.stringify(newData));
+      console.log('Data saved to AsyncStorage:', newData);
     } catch (error) {
       console.error('Error saving data to AsyncStorage:', error);
     }
@@ -56,6 +58,11 @@ const ManualUpdate = () => {
   };
 
   const handleAdd = async () => {
+    if (!latitude || !longitude || !n || !p || !k) {
+      console.error('Please fill in all fields.');
+      return;
+    }
+
     const newData = {
       id: Date.now().toString(),
       latitude,
@@ -68,7 +75,7 @@ const ManualUpdate = () => {
     // Save new data locally
     const updatedData = [...data, newData];
     setData(updatedData);
-    saveData(updatedData);
+    await saveData(updatedData);
 
     // Send data to ThingSpeak
     const tsData = {

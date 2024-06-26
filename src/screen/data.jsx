@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Button } from 'react-native';
-import CustomCheckBox from './CustomCheckBox'; // Ensure this path is correct
+// import CustomCheckBox from './CustomCheckBox'; // Ensure this path is correct
 
 const Data = ({ navigation, onSelect = () => {} }) => {
   const [locationData, setLocationData] = useState([]);
@@ -35,15 +35,15 @@ const Data = ({ navigation, onSelect = () => {} }) => {
     fetchData(); // Call fetchData function when component mounts
   }, []);
 
-  const handleSelect = (item) => {
-    const isSelected = selectedData.some((data) => data.created_at === item.created_at);
-    const newSelectedData = isSelected
-      ? selectedData.filter((data) => data.created_at !== item.created_at)
-      : [...selectedData, item];
+  // const handleSelect = (item) => {
+  //   const isSelected = selectedData.some((data) => data.created_at === item.created_at);
+  //   const newSelectedData = isSelected
+  //     ? selectedData.filter((data) => data.created_at !== item.created_at)
+  //     : [...selectedData, item];
 
-    setSelectedData(newSelectedData);
-    onSelect(newSelectedData);
-  };
+  //   setSelectedData(newSelectedData);
+  //   onSelect(newSelectedData);
+  // };
 
   return (
     <ScrollView style={styles.container}>
@@ -56,17 +56,17 @@ const Data = ({ navigation, onSelect = () => {} }) => {
       <Text style={styles.header}>Location Data (Channel 1)</Text>
       <View style={styles.table}>
         <View style={styles.tableRow}>
-          <Text style={styles.tableHeader}>Select</Text>
+          {/* <Text style={styles.tableHeader}>Select</Text> */}
           <Text style={styles.tableHeader}>Latitude</Text>
           <Text style={styles.tableHeader}>Longitude</Text>
           <Text style={styles.tableHeader}>Timestamp</Text>
         </View>
         {locationData.map((item, index) => (
           <View style={styles.tableRow} key={index}>
-            <CustomCheckBox
+            {/* <CustomCheckBox
               isChecked={selectedData.some((data) => data.created_at === item.created_at)}
               onPress={() => handleSelect(item)}
-            />
+            /> */}
             <Text style={styles.tableCell}>{item.field1}</Text>
             <Text style={styles.tableCell}>{item.field2}</Text>
             <Text style={styles.tableCell}>{item.created_at}</Text>
@@ -77,7 +77,7 @@ const Data = ({ navigation, onSelect = () => {} }) => {
       <Text style={styles.header}>N, P, K Values (Channel 2)</Text>
       <View style={styles.table}>
         <View style={styles.tableRow}>
-          <Text style={styles.tableHeader}>Select</Text>
+          {/* <Text style={styles.tableHeader}>Select</Text> */}
           <Text style={styles.tableHeader}>N</Text>
           <Text style={styles.tableHeader}>P</Text>
           <Text style={styles.tableHeader}>K</Text>
@@ -85,10 +85,10 @@ const Data = ({ navigation, onSelect = () => {} }) => {
         </View>
         {npkData.map((item, index) => (
           <View style={styles.tableRow} key={index}>
-            <CustomCheckBox
+            {/* <CustomCheckBox
               isChecked={selectedData.some((data) => data.created_at === item.created_at)}
               onPress={() => handleSelect(item)}
-            />
+            /> */}
             <Text style={styles.tableCell}>{item.field1}</Text>
             <Text style={styles.tableCell}>{item.field2}</Text>
             <Text style={styles.tableCell}>{item.field3}</Text>
