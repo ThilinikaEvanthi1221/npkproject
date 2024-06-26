@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, FlatList } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ManualUpdate = () => {
   const [latitude, setLatitude] = useState('');
@@ -9,30 +10,33 @@ const ManualUpdate = () => {
   const [k, setK] = useState('');
   const [data, setData] = useState([]);
 
-  const handleAdd = async () => {
-    const newData = {
-      id: Date.now().toString(), // Unique ID for FlatList
-      latitude,
-      longitude,
-      n,
-      p,
-      k,
+  // Load data from AsyncStorage on component mount
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const savedData = await AsyncStorage.getItem('savedData');
+        if (savedData !== null) {
+          setData(JSON.parse(savedData));
+        }
+      } catch (error) {
+        console.error('Error loading data from AsyncStorage:', error);
+      }
     };
+    fetchData();
+  }, []);
 
-    setData([...data, newData]);
-
-    // Prepare data to send to ThingSpeak
-    const tsData = {
-      api_key: '9FCBJCHUZDT0M9I8',
-      field1: latitude.toString(),
-      field2: longitude.toString(),
-      field3: n.toString(),
-      field4: p.toString(),
-      field5: k.toString(),
-    };
-
+  // Function to save data to AsyncStorage
+  const saveData = async (newData) => {
     try {
-      // Send data to ThingSpeak
+      await AsyncStorage.setItem('savedData', JSON.stringify(newData));
+    } catch (error) {
+      console.error('Error saving data to AsyncStorage:', error);
+    }
+  };
+
+  // Function to send data to ThingSpeak
+  const sendDataToThingSpeak = async (tsData) => {
+    try {
       const response = await fetch(`https://api.thingspeak.com/update.json`, {
         method: 'POST',
         headers: {
@@ -49,6 +53,33 @@ const ManualUpdate = () => {
     } catch (error) {
       console.error('Error uploading data to ThingSpeak:', error);
     }
+  };
+
+  const handleAdd = async () => {
+    const newData = {
+      id: Date.now().toString(),
+      latitude,
+      longitude,
+      n,
+      p,
+      k,
+    };
+
+    // Save new data locally
+    const updatedData = [...data, newData];
+    setData(updatedData);
+    saveData(updatedData);
+
+    // Send data to ThingSpeak
+    const tsData = {
+      api_key: '9FCBJCHUZDT0M9I8', // Replace with your ThingSpeak API key
+      field1: latitude.toString(),
+      field2: longitude.toString(),
+      field3: n.toString(),
+      field4: p.toString(),
+      field5: k.toString(),
+    };
+    sendDataToThingSpeak(tsData);
 
     // Clear input fields after submission
     setLatitude('');
@@ -60,7 +91,7 @@ const ManualUpdate = () => {
 
   return (
     <View style={styles.container}>
-      <Text>Manual Update to Channel 3</Text>
+      <Text>Manual Update to ThingSpeak Channel</Text>
       <TextInput
         style={styles.input}
         placeholder="Latitude"
